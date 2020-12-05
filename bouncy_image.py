@@ -62,7 +62,10 @@ def calc_dt():
         if current_time - starting_time <= animation_start_delay:
             dt = 0.
         elif current_time - starting_time <= animation_start_delay + animation_time:
-            dt = current_time-last_time # in seconds
+            if fixed_dt:
+                dt = 1/fps
+            else:
+                dt = current_time-last_time # in seconds
         elif current_time - starting_time <= animation_start_delay + animation_time + animation_end_delay:
             dt = 0.
         else:
@@ -72,26 +75,29 @@ def calc_dt():
 # does the animation
 def update_animation(dt):
     global balls, scat
-    #print("dt=",dt)
-    temp_time = time.time()
+
+    if show_debug_time: print("dt =",dt)
+    debug_time("matplotlib",show_debug_time)
+    
     # move every ball and check the boundary collision
     for ball in balls:
         ball.move(dt)
         ball.boundary_collision(boundary)
-    #print("move+boundary=",time.time()-temp_time)
-    temp_time = time.time()
+    
+    debug_time("move+boundary",show_debug_time)
 
     balls_by_sector = Ball.sort_balls_in_sectors(balls, boundary)
-    #print("balls_by_sector=",time.time()-temp_time)
-    temp_time = time.time()
+    
+    debug_time("sector_sort",show_debug_time)
+
     # check every ball pair in every sector
     for key in balls_by_sector:
         balls_in_sector = balls_by_sector[key]
         for i in range(len(balls_in_sector)-1):
             for j in range(i+1,len(balls_in_sector)):
                 Ball.ball_collision(balls_in_sector[i],balls_in_sector[j])
-    #print("collisions=",time.time()-temp_time)
-    temp_time = time.time()
+    
+    debug_time("sector_collisions",show_debug_time)
     
     # update the visuals
     x_data = []
@@ -101,11 +107,17 @@ def update_animation(dt):
         y_data.append(ball.x[1])
     scat.set_offsets(np.column_stack((x_data,y_data)))
     
-    #print("visuals=",time.time()-temp_time)
-    temp_time = time.time()
+    debug_time("visuals",show_debug_time)
+
     return scat,
 
-
+def debug_time(label="elapsed-time",show_msg=True):
+    global debug_time_last
+    if "debug_time_last" not in globals():
+        debug_time_last = 0
+    if debug_time_last > 0 and show_msg:
+        print(label," = ",time.time()-debug_time_last)
+    debug_time_last = time.time()
 
 # animate
 ani = anim.FuncAnimation(fig, update_animation, frames=calc_dt, init_func=init_animation, interval=1000/fps, blit=True)
