@@ -24,15 +24,14 @@ def init_animation():
     img = Image.open(image_path)
     pix = img.load()
     # set boundaries
-    boundary = Boundary(-1,img.size[0]+1,-1,img.size[1]+1)
+    boundary = Boundary(-1,img.size[0],-1,img.size[1])
     # init balls
-    # TODO: Picture is inverted in the y direction
     for col in range(img.size[0]):
         for row in range(img.size[1]):
             # TODO: don't use white/grey/transparent pixels
             if pix[col,row][3] > 0:
                 x = float(col)
-                y = float(row)
+                y = float(img.size[1] - row - 1)
                 color = [rgba/255 for rgba in pix[col,row]]
                 ball = Ball(x,y,color)
                 balls.append(ball)
