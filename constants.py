@@ -11,8 +11,8 @@ image_path = "images/python_logo_32.png"
 
 # ball constants
 r = 0.35 # radius
-v_min = 0.5 # min velocity
-v_max = 2 # max velocity
+v_min = 5 # min velocity
+v_max = 10 # max velocity
 
 # collision constants
 sector_max_size = 3 # max length of the sides of the sector
