@@ -5,7 +5,7 @@ animation_end_delay = 2 # how many seconds the animation should stand still at t
 fps = 60 # frames per second
 
 # image constants
-image_path = "python_logo_32.png"
+image_path = "images/python_logo_32.png"
 
 # ball constants
 r = 0.35 # radius
