@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 from numpy import pi
 
+# check out: https://stackoverflow.com/questions/65174418/how-to-adjust-the-marker-size-of-a-scatter-plot-so-that-it-matches-a-given-radi
+
 n = 16
 # create a n x n square with a marker at each point as dummy data
 x_data = []
