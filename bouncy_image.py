@@ -25,6 +25,13 @@ def init_animation():
     pix = img.load()
     # set boundaries
     boundary = Boundary(-1,img.size[0],-1,img.size[1])
+    # set figure size
+    fig.set_figwidth(fig_width)
+    aspect_ratio = img.width/img.height
+    fig.set_figheight(fig_width/aspect_ratio)
+    # set axes limits
+    ax.set_xlim(boundary.l, boundary.r)
+    ax.set_ylim(boundary.b, boundary.t)
     # init balls
     for col in range(img.size[0]):
         for row in range(img.size[1]):
@@ -43,13 +50,13 @@ def init_animation():
         x_data.append(ball.x[0])
         y_data.append(ball.x[1])
         color_data.append(ball.color)
-    # init plot
-    # TODO: fit the marker size with the ball radius
-    scat = ax.scatter(x_data, y_data, c=color_data)
 
-    # init limits
-    ax.set_xlim(boundary.l, boundary.r)
-    ax.set_ylim(boundary.b, boundary.t)
+    # calc ball size in points^2 via matplotlib transformations
+    r_ = ax.transData.transform([r,0])[0] - ax.transData.transform([0,0])[0] # points
+    marker_size = (2*r_)**2 * marker_size_correction_factor # points^2
+    # init plot
+    scat = ax.scatter(x_data, y_data, c=color_data, s=marker_size)
+
     return scat,
 
 # generator function for each frames delta time

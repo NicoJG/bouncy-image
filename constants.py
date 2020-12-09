@@ -1,3 +1,7 @@
+# figure constants
+fig_width = 8 # Inches
+marker_size_correction_factor = 0.5
+
 # animation constants
 animation_start_delay = 2 # how many seconds the animation should stand still at the beginning
 animation_time = 100 # how many seconds should the animation run
