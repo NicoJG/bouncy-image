@@ -9,8 +9,6 @@ from constants import *
 from ball import Ball
 from boundary import Boundary
 
-# TODO: collisions are kinda weird when multiple collisions happen to one ball on one frame
-
 # get image pixels
 img = Image.open(image_path)
 pix = img.load()
