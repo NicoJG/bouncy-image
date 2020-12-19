@@ -29,5 +29,4 @@ def cut_background(img,threshold,dist):
       )
     pix[mask,3] = 0
     pix[a<50,3] = 0
-    print(pix)
     return Image.fromarray(pix)
