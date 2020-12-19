@@ -1,8 +1,8 @@
 # video constants
-save_video = True
+save_video = False
 save_as_gif = True
 video_file = "video" # without ending
-video_height = 720 # pixels
+video_height = 720 # pixels (if it's to low, you get an error)
 
 # figure constants
 fig_height = 1000 # Inches (don't change! the less it is the less precise is the marker_size)
@@ -17,7 +17,10 @@ fixed_dt = save_video # when saved as a video you'll want a fixed dt
 show_debug_time = False
 
 # image constants
-image_path = "images/python_logo_64.png"
+image_path = "images/tu.png"
+image_height = 32 # how many pixels should be displayed in a vertical line? The width is calculated from this
+crop_image = True # should the image be cropped to the important part?
+filter_white_pixels = True # If too much of your image is missing you may want to make the background transparent and make this False
 
 # ball constants
 r = 0.35 # radius

@@ -3,17 +3,15 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as anim
 import time
 from PIL import Image
+from image_manipulation import load_image
 
 # import other files of this project
 from constants import *
 from ball import Ball
 from boundary import Boundary
 
-# get image pixels
-img = Image.open(image_path)
-pix = img.load()
-# get apect ratio
-aspect_ratio = img.width/img.height
+# get image
+img, aspect_ratio = load_image()
 # set boundaries
 boundary = Boundary(-1,img.size[0],-1,img.size[1])
 # init figure and axes
@@ -32,11 +30,11 @@ def init_animation():
     balls = []
     for col in range(img.size[0]):
         for row in range(img.size[1]):
-            # TODO: don't use white/grey/transparent pixels
-            if pix[col,row][3] > 0:
+            if img.getpixel((col,row))[3] > 0:
                 x = float(col)
                 y = float(img.size[1] - row - 1)
-                color = [rgba/255 for rgba in pix[col,row]]
+                # rgba 0-255 to rgba 0-1
+                color = [rgba/255 for rgba in img.getpixel((col,row))]
                 ball = Ball(x,y,color)
                 balls.append(ball)
     # init plot data
