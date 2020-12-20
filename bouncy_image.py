@@ -9,6 +9,7 @@ from image_manipulation import load_image
 from constants import *
 from ball import Ball
 from boundary import Boundary
+from progress_bar import ProgressBar
 
 # get image
 img, aspect_ratio = load_image()
@@ -22,10 +23,13 @@ ax.set_axis_off()
 # set axes limits
 ax.set_xlim(boundary.l, boundary.r)
 ax.set_ylim(boundary.b, boundary.t)
+# init progress bar
+progressbar = ProgressBar(0,frame_count_estimate,"Running animation")
 
 # init_func called before the first frame
 def init_animation():
     global balls, scat
+    progressbar.start()
     # init balls
     balls = []
     for col in range(img.size[0]):
@@ -76,6 +80,8 @@ def calc_dt():
         elif current_time - starting_time <= animation_start_delay + animation_time + animation_end_delay:
             dt = 0.
         else:
+            if not fixed_dt:
+                progressbar.end()
             break
         frame_count += 1
         yield dt
@@ -117,6 +123,15 @@ def update_animation(dt):
 
     debug_time("visuals",show_debug_time)
 
+    # handle progress bar
+    progressbar.update(frame_count)
+    if fixed_dt and frame_count == frame_count_estimate:
+        progressbar.end()
+        if save_video:
+            print("Saving the file now...")
+            debug_time("Time for postprocessing/saving",False)
+
+
     return scat,
 
 def debug_time(label="elapsed-time",show_msg=True):
@@ -124,19 +139,17 @@ def debug_time(label="elapsed-time",show_msg=True):
     if "debug_time_last" not in globals():
         debug_time_last = 0
     if debug_time_last > 0 and show_msg:
-        print(label," = ",time.time()-debug_time_last)
+        print(label," = ",round(time.time()-debug_time_last,4)," s")
     debug_time_last = time.time()
 
-# estimate frame count
-frame_count_estimate = fps * (animation_start_delay + animation_time + animation_end_delay)
-
 # animate
-ani = anim.FuncAnimation(fig, func=update_animation, frames=calc_dt, init_func=init_animation, interval=1000/fps, save_count=frame_count_estimate, blit=True, repeat=False)
+ani = anim.FuncAnimation(fig, func=update_animation, frames=calc_dt, init_func=init_animation, interval=frame_delay, save_count=frame_count_estimate, blit=True, repeat=False)
 
 if save_video: 
     if save_as_gif:
         ani.save(video_file+".gif", writer="pillow", dpi=fig.dpi, fps=fps)
     else:
         ani.save(video_file+".mp4", writer="ffmpeg", dpi=fig.dpi, fps=fps)
+    debug_time("file saving time",True)
 else:
     plt.show()

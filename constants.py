@@ -15,6 +15,8 @@ animation_end_delay = 2 # how many seconds the animation should stand still at t
 fps = 30 # frames per second
 fixed_dt = save_video # when saved as a video you'll want a fixed dt
 show_debug_time = False
+frame_count_estimate = fps * (animation_start_delay + animation_time + animation_end_delay) # estimate the total frames
+frame_delay = 1000/fps if not save_video else 0
 
 # image constants
 image_path = "images/tu.png"
