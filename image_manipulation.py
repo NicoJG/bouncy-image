@@ -11,7 +11,7 @@ def load_image():
     aspect_ratio = img.width/img.height
     img = img.resize( (int(image_height*aspect_ratio), image_height) , resample=Image.BICUBIC)
     # filter all pixels that are almost white (invisible)
-    if filter_white_pixels: img = cut_background(img,100,10)
+    if filter_white_pixels: img = cut_background(img,255,10)
     return img, aspect_ratio
 
 def cut_background(img,threshold,dist):
